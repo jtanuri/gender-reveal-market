@@ -28,7 +28,7 @@ st.image(
     "baby.png",
     width=1000
 )
-
+st.write("")
 st.title("🎉 Gender Reveal Prediction Market")
 
 # -------------------------
