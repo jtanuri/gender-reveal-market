@@ -27,7 +27,20 @@ sns.set_theme(style="darkgrid")
 st.image("baby.png", width=1000)
 st.markdown(
     """
-    <h1 style='text-align: center; margin-top: -200px;'>🎉 Gender Reveal Prediction Market </h1>
+    <h1 style='text-align: center; margin-top: -20px;'>
+        🎉 Gender Reveal Prediction Market (Rupiah)
+    </h1>
+    <p style='text-align: center; font-size: 18px; color: white;'>
+        Everyone places a bet on either <strong>'Boy'</strong> or <strong>'Girl'</strong>.<br>
+        When the actual gender is revealed, all the money from those who bet incorrectly is pooled and shared among the winners in proportion to how much they bet.
+        The fewer people who bet correctly, the larger each winner's payout will be — so if the 'Girl' pool is much smaller and 'Girl' is correct,
+        the payout multiplier will be much higher.
+        <br><br>
+        <em>Note:</em> 50% of each winner’s profit is automatically donated to Nathan’s foundation and/or YCAB.
+        <br><br>
+        <strong>📌 Please transfer your bet amount to: <u>6500887786 a/n Joseph Ian Tanuri</u></strong><br>
+        <strong>Include the note: <em>“Untuk Kalangan Sendiri”</em> in your transfer description.</strong>
+    </p>
     """,
     unsafe_allow_html=True
 )
