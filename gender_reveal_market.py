@@ -27,7 +27,7 @@ sns.set_theme(style="darkgrid")
 st.markdown(
     """
     <div style="text-align: center;">
-        <img src="baby.png" width="200">
+        <img src="https://github.com/jtanuri/gender-reveal-market/blob/e2f490fada270c46c4aa0de78a587548b505c667/baby.png" width="200">
         <h1 style="margin-top: 10px;">🎉 Gender Reveal Prediction Market </h1>
     </div>
     """,
