@@ -172,56 +172,59 @@ if total_pool > 0:
 # -------------------------
 # Reveal Gender + Payouts
 # -------------------------
-st.header("🎁 Reveal the Actual Gender (admin only)")
+with st.expander("🔒 Admin: Reveal Gender, Payouts & Reset"):
+    admin_pass = st.text_input("Enter admin password:", type="password")
 
-gender = st.selectbox("Actual Gender", ["-- Select --", "Boy", "Girl"])
-if gender != "-- Select --":
-    st.session_state.actual_gender = gender
-    st.success(f"🎉 Actual Gender: {gender}")
+    if admin_pass == "mysecret123":  # ✅ Replace with your own secret!
+        # Reveal Actual Gender
+        st.header("🎁 Reveal the Actual Gender")
+        gender = st.selectbox("Actual Gender", ["-- Select --", "Boy", "Girl"])
+        if gender != "-- Select --":
+            st.session_state.actual_gender = gender
+            st.success(f"🎉 Actual Gender: {gender}")
 
-if st.session_state.actual_gender:
-    winners = st.session_state.bets[st.session_state.bets['Choice'] == st.session_state.actual_gender]
-    total_winner_bets = winners['Bet'].sum()
+        # Payout Calculation + Download
+        if st.session_state.actual_gender:
+            winners = st.session_state.bets[st.session_state.bets['Choice'] == st.session_state.actual_gender]
+            total_winner_bets = winners['Bet'].sum()
 
-    payouts = []
-    for _, row in st.session_state.bets.iterrows():
-        if row['Choice'] == st.session_state.actual_gender and total_winner_bets > 0:
-            payout = row['Bet'] * total_pool / total_winner_bets
-            payout = round(payout / 100000) * 100000
-        else:
-            payout = 0
-        payouts.append(payout)
+            payouts = []
+            for _, row in st.session_state.bets.iterrows():
+                if row['Choice'] == st.session_state.actual_gender and total_winner_bets > 0:
+                    payout = row['Bet'] * total_pool / total_winner_bets
+                    payout = round(payout / 100000) * 100000
+                else:
+                    payout = 0
+                payouts.append(payout)
 
-    result = st.session_state.bets.copy()
-    result['Payout (Rupiah)'] = payouts
+            result = st.session_state.bets.copy()
+            result['Payout (Rupiah)'] = payouts
 
-    st.header("💰 Final Payouts")
+            st.header("💰 Final Payouts")
+            result_display = result.copy()
+            result_display['Payout (Rupiah)'] = result_display['Payout (Rupiah)'].apply(lambda x: f"Rp {x:,.0f}")
+            st.dataframe(result_display)
 
-    result_display = result.copy()
-    result_display['Payout (Rupiah)'] = result_display['Payout (Rupiah)'].apply(lambda x: f"Rp {x:,.0f}")
-    st.dataframe(result_display)
+            st.write(f"🏆 Total Pool: Rp {total_pool:,.0f} distributed to winners.")
 
-    st.write(f"🏆 Total Pool: Rp {total_pool:,.0f} distributed to winners.")
+            towrite = BytesIO()
+            with pd.ExcelWriter(towrite, engine='xlsxwriter') as writer:
+                result.to_excel(writer, index=False, sheet_name='Payouts')
+            towrite.seek(0)
 
-    towrite = BytesIO()
-    with pd.ExcelWriter(towrite, engine='xlsxwriter') as writer:
-        result.to_excel(writer, index=False, sheet_name='Payouts')
-    towrite.seek(0)
+            st.download_button(
+                label="📥 Download Payouts as Excel",
+                data=towrite,
+                file_name="GenderReveal_Payouts.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
 
-    st.download_button(
-        label="📥 Download Payouts as Excel",
-        data=towrite,
-        file_name="GenderReveal_Payouts.xlsx",
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
-
-# -------------------------
-# Reset Button
-# -------------------------
-st.header("🗑️ Reset Market")
-
-if st.button("🔄 Reset Everything"):
-    st.session_state.bets = pd.DataFrame(columns=['Name', 'Choice', 'Bet'])
-    st.session_state.actual_gender = None
-    st.session_state.odds_history = pd.DataFrame(columns=['Timestamp', 'Boy', 'Girl'])
-    st.rerun()
+        # RESET BUTTON
+        st.header("🗑️ Reset Market")
+        if st.button("🔄 Reset Everything"):
+            st.session_state.bets = pd.DataFrame(columns=['Name', 'Choice', 'Bet'])
+            st.session_state.actual_gender = None
+            st.session_state.odds_history = pd.DataFrame(columns=['Timestamp', 'Boy', 'Girl'])
+            st.rerun()
+    else:
+        st.info("🔑 Enter the admin password to access this section.")
