@@ -56,9 +56,6 @@ total_pool = total_boy + total_girl
 boy_odds = total_boy / total_pool if total_pool > 0 else 0
 girl_odds = total_girl / total_pool if total_pool > 0 else 0
 
-# -------------------------
-# Place Bet Form
-# -------------------------
 with st.expander("📌 Place Your Bet"):
     with st.form("bet_form"):
         name = st.text_input("Your Name")
@@ -71,12 +68,15 @@ with st.expander("📌 Place Your Bet"):
             st.rerun()
 
 # -------------------------
-# Show Bets + Remove Bet
+# Show Bets + Remove Option
 # -------------------------
 st.header("📝 Current Bets")
 
 if not st.session_state.bets.empty:
-    st.dataframe(st.session_state.bets)
+    # ✅ Format Bet with Rp and commas for display
+    bets_display = st.session_state.bets.copy()
+    bets_display['Bet'] = bets_display['Bet'].apply(lambda x: f"Rp {x:,.0f}")
+    st.dataframe(bets_display)
 
     with st.expander("🗑️ Remove a Bet"):
         bet_index = st.number_input(
@@ -106,7 +106,7 @@ if total_pool > 0:
         ], ignore_index=True)
 
 # -------------------------
-# Live Market (Fully Dark Graphs)
+# Live Market (Dark Charts)
 # -------------------------
 if total_pool > 0:
     st.header("📊 Live Market")
@@ -119,11 +119,11 @@ if total_pool > 0:
 
     st.write(f"**Total Pool:** Rp {total_pool:,.0f}")
 
-    # ✅ Pie Chart — smaller & dark
+    # Pie Chart — fully dark
     fig1, ax1 = plt.subplots(figsize=(4, 4), facecolor='#121212')
     ax1.set_facecolor('#121212')
     explode = (0.05, 0.05)
-    wedges, texts, autotexts = ax1.pie(
+    ax1.pie(
         [total_boy, total_girl],
         labels=['Boy', 'Girl'],
         colors=['#1f77b4', '#ff69b4'],
@@ -137,7 +137,7 @@ if total_pool > 0:
     fig1.patch.set_facecolor('#121212')
     st.pyplot(fig1)
 
-    # ✅ Line Chart — fully dark
+    # Line Chart — fully dark
     if not st.session_state.odds_history.empty:
         st.subheader("📈 Odds Over Time")
         fig2, ax2 = plt.subplots(figsize=(8, 4), facecolor='#121212')
@@ -171,20 +171,18 @@ if total_pool > 0:
         st.pyplot(fig2)
 
 # -------------------------
-# Reveal Gender + Payouts
+# 🔒 SECRET ADMIN SECTION: Reveal, Payouts, Reset
 # -------------------------
 with st.expander("🔒 Admin: Reveal Gender, Payouts & Reset"):
     admin_pass = st.text_input("Enter admin password:", type="password")
 
-    if admin_pass == "mysecret123":  # ✅ Replace with your own secret!
-        # Reveal Actual Gender
+    if admin_pass == "mysecret123":  # ✅ Replace with your secure password!
         st.header("🎁 Reveal the Actual Gender")
         gender = st.selectbox("Actual Gender", ["-- Select --", "Boy", "Girl"])
         if gender != "-- Select --":
             st.session_state.actual_gender = gender
             st.success(f"🎉 Actual Gender: {gender}")
 
-        # Payout Calculation + Download
         if st.session_state.actual_gender:
             winners = st.session_state.bets[st.session_state.bets['Choice'] == st.session_state.actual_gender]
             total_winner_bets = winners['Bet'].sum()
@@ -203,6 +201,7 @@ with st.expander("🔒 Admin: Reveal Gender, Payouts & Reset"):
 
             st.header("💰 Final Payouts")
             result_display = result.copy()
+            result_display['Bet'] = result_display['Bet'].apply(lambda x: f"Rp {x:,.0f}")
             result_display['Payout (Rupiah)'] = result_display['Payout (Rupiah)'].apply(lambda x: f"Rp {x:,.0f}")
             st.dataframe(result_display)
 
@@ -220,7 +219,6 @@ with st.expander("🔒 Admin: Reveal Gender, Payouts & Reset"):
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
 
-        # RESET BUTTON
         st.header("🗑️ Reset Market")
         if st.button("🔄 Reset Everything"):
             st.session_state.bets = pd.DataFrame(columns=['Name', 'Choice', 'Bet'])
