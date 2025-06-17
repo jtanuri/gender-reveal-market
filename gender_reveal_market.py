@@ -27,7 +27,7 @@ sns.set_theme(style="darkgrid")
 st.image("baby.png", width=1000)
 st.markdown(
     """
-    <h1 style='text-align: center; margin-top: -200px;'>
+    <h1 style='text-align: center; margin-top: -250px;'>
         🎉 Gender Reveal Prediction Market (Rupiah)
     </h1>
     <p style='text-align: center; font-size: 18px; color: white;'>
