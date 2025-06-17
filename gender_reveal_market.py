@@ -25,8 +25,8 @@ sns.set_theme(style="darkgrid")
 
 # Optional: Logo
 st.image(
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Polymarket_Logo.svg/2560px-Polymarket_Logo.svg.png",
-    width=150
+    "baby.jpg",
+    width=200
 )
 
 st.title("🎉 Gender Reveal Prediction Market")
