@@ -25,7 +25,7 @@ sns.set_theme(style="darkgrid")
 
 # Optional: Logo
 st.image(
-    "baby.jpg",
+    "baby.png",
     width=1000
 )
 
