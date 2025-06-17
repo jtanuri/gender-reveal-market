@@ -26,7 +26,7 @@ sns.set_theme(style="darkgrid")
 # Optional: Logo
 st.image(
     "baby.png",
-    width=200
+    width=1000
 )
 
 st.title("🎉 Gender Reveal Prediction Market")
