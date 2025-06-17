@@ -29,7 +29,7 @@ st.image(
     width=150
 )
 
-st.title("🎉 Gender Reveal Prediction Market (Rupiah)")
+st.title("🎉 Gender Reveal Prediction Market")
 
 # -------------------------
 # Recalculate totals every run
