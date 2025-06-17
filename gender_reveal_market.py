@@ -27,7 +27,7 @@ sns.set_theme(style="darkgrid")
 st.image("baby.png", width=1000)
 st.markdown(
     """
-    <h1 style='text-align: center; margin-top: -20px;'>
+    <h1 style='text-align: center; margin-top: -200px;'>
         🎉 Gender Reveal Prediction Market (Rupiah)
     </h1>
     <p style='text-align: center; font-size: 18px; color: white;'>
@@ -39,7 +39,7 @@ st.markdown(
         <em>Note:</em> 50% of each winner’s profit is automatically donated to Nathan’s foundation and/or YCAB.
         <br><br>
         <strong>📌 Please transfer your bet amount to: <u>6500887786 a/n Joseph Ian Tanuri</u></strong><br>
-        <strong>Include the note: <em>“Untuk Kalangan Sendiri”</em> in your transfer description.</strong>
+        <strong><em>“Untuk Kalangan Sendiri”</em></strong>
     </p>
     """,
     unsafe_allow_html=True
