@@ -24,10 +24,10 @@ st.set_page_config(page_title="Gender Reveal Prediction Market 🎉", layout="ce
 sns.set_theme(style="darkgrid")
 
 # Optional: Logo
-st.image("baby.png", width=200)
+st.image("baby.png", width=1000)
 st.markdown(
     """
-    <h1 style='text-align: center; margin-top: -20px;'>🎉 Gender Reveal Prediction Market (Rupiah)</h1>
+    <h1 style='text-align: center; margin-top: -20px;'>🎉 Gender Reveal Prediction Market </h1>
     """,
     unsafe_allow_html=True
 )
