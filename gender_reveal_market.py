@@ -28,7 +28,7 @@ st.image("baby.png", width=1000)
 st.markdown(
     """
     <h1 style='text-align: center; margin-top: -250px;'>
-        🎉 Gender Reveal Prediction Market (Rupiah)
+        🎉 Gender Reveal Prediction Market (Rupiah) - Real Money, % for Charity
     </h1>
     <p style='text-align: center; font-size: 18px; color: white;'>
         Everyone places a bet on either <strong>'Boy'</strong> or <strong>'Girl'</strong>.<br>
@@ -37,7 +37,7 @@ st.markdown(
         the payout multiplier will be much higher. The multiplier is calculated at the end of the event. So if you place a bet on girl when theres 15jt in the boy pool
         and 1 jt in the girl pool, you are not guaranteed a large multiplier if the pools reach equilibrium
         <br><br>
-        <em>Note:</em> 50% of each winner’s profit is automatically donated to Nathan’s foundation and/or YCAB.
+        <em>Note:</em> 20% of each winner’s profit is automatically donated to Nathan’s foundation and/or YCAB.
         <br><br>
         <strong>📌 Please transfer your bet amount to: <u>6500887786 a/n Joseph Ian Tanuri</u></strong><br>
         <strong><em>“Untuk Kalangan Sendiri”</em></strong>
