@@ -24,12 +24,15 @@ st.set_page_config(page_title="Gender Reveal Prediction Market 🎉", layout="ce
 sns.set_theme(style="darkgrid")
 
 # Optional: Logo
-st.image(
-    "baby.png",
-    width=1000
+st.markdown(
+    """
+    <div style="text-align: center;">
+        <img src="baby.png" width="200">
+        <h1 style="margin-top: 10px;">🎉 Gender Reveal Prediction Market </h1>
+    </div>
+    """,
+    unsafe_allow_html=True
 )
-st.write("")
-st.title("🎉 Gender Reveal Prediction Market")
 
 # -------------------------
 # Recalculate totals every run
