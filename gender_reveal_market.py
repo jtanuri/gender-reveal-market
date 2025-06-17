@@ -159,7 +159,7 @@ if total_pool > 0:
 # -------------------------
 # Reveal Gender + Payouts
 # -------------------------
-st.header("🎁 Reveal the Actual Gender")
+st.header("🎁 Reveal the Actual Gender (admin only)")
 
 gender = st.selectbox("Actual Gender", ["-- Select --", "Boy", "Girl"])
 if gender != "-- Select --":
