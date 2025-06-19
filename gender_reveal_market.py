@@ -32,11 +32,9 @@ st.markdown(
     </h1>
     <p style='text-align: center; font-size: 18px; color: white;'>
         Everyone places a bet on either <strong>'Boy'</strong> or <strong>'Girl'</strong>.<br>
-        When the actual gender is revealed, all the money from those who bet incorrectly is pooled and shared among the winners in proportion to how much they bet.
-        
+        When the actual gender is revealed, all the money from those who bet incorrectly is pooled and shared among the winners in proportion to how much they bet. 
         The fewer the amount bet correctly, the larger each winner's payout will be — so if the 'Girl' pool is much smaller and 'Girl' is correct,
         the payout multiplier will be much higher. 
-        
         The multiplier is calculated at the end of the event. So if you place a bet on girl when theres 15jt in the boy pool
         and 1 jt in the girl pool, you are not guaranteed a large multiplier if the pools reach equilibrium
         <br><br>
