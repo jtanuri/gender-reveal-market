@@ -23,12 +23,19 @@ if 'odds_history' not in st.session_state:
 st.set_page_config(page_title="Gender Reveal Prediction Market 🎉", layout="centered")
 sns.set_theme(style="darkgrid")
 
-# Correct way to change background
+# Set background to yellow and text to dark gray
 st.markdown(
     """
     <style>
     .stApp {
-        background-color: #fffd74;
+        background-color: #fff9c4;
+        color: #212121;
+    }
+    .stMarkdown p, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5, .stMarkdown h6 {
+        color: #212121 !important;
+    }
+    .stDataFrame, .stTable {
+        color: #212121 !important;
     }
     </style>
     """,
