@@ -23,6 +23,18 @@ if 'odds_history' not in st.session_state:
 st.set_page_config(page_title="Gender Reveal Prediction Market 🎉", layout="centered")
 sns.set_theme(style="darkgrid")
 
+# Set background color to yellow
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: #fffd74;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Optional: Logo
 st.image("baby.png", width=1000)
 st.markdown(
