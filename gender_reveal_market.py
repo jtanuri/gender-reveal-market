@@ -23,19 +23,40 @@ if 'odds_history' not in st.session_state:
 st.set_page_config(page_title="Gender Reveal Prediction Market 🎉", layout="centered")
 sns.set_theme(style="darkgrid")
 
-# Set background to yellow and text to dark gray
+# Set background and text styles across the app
 st.markdown(
     """
     <style>
+    /* Set entire app background */
     .stApp {
-        background-color: #fff9c4;
-        color: #212121;
-    }
-    .stMarkdown p, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5, .stMarkdown h6 {
+        background-color: #fff9c4 !important;
         color: #212121 !important;
     }
+
+    /* Set main block background to match */
+    .block-container {
+        background-color: #fff9c4 !important;
+        color: #212121 !important;
+    }
+
+    /* Set all markdown headings and paragraphs to dark */
+    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3,
+    .stMarkdown h4, .stMarkdown h5, .stMarkdown h6,
+    .stMarkdown p, .stMarkdown strong, .stMarkdown em, .stMarkdown ul, .stMarkdown ol {
+        color: #212121 !important;
+        background-color: transparent !important;
+    }
+
+    /* Optional: override input and text color */
+    .css-1cpxqw2, .css-1t0y8b6, .css-1fv8s86 {
+        background-color: #fffde7 !important;  /* very light yellow inputs */
+        color: #212121 !important;
+    }
+
+    /* Optional: style inside tables */
     .stDataFrame, .stTable {
         color: #212121 !important;
+        background-color: #fffde7 !important;
     }
     </style>
     """,
