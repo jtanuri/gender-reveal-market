@@ -209,7 +209,8 @@ elif popout_mode == "line":
             x='Timestamp',
             y=['Boy', 'Girl'],
             markers=True,
-            title='Live Odds Over Time'
+            title='Live Odds Over Time',
+            color_discrete_map={'Boy': '#1f77b4', 'Girl': '#ff69b4'}
         )
         fig.update_layout(paper_bgcolor='#fff9c4', plot_bgcolor='#fff9c4')
         st.plotly_chart(fig, use_container_width=True)
