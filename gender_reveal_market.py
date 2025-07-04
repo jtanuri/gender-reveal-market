@@ -85,6 +85,32 @@ if isinstance(popout_mode, list):
     popout_mode = popout_mode[0]
 
 # -------------------------
+# Optional: Logo and Title
+# -------------------------
+if not popout_mode:
+    st.image("baby.png", width=1000)
+    st.markdown(
+        """
+        <h1 style='text-align: center; margin-top: -250px;'>
+            🎉 Gender Reveal Prediction Market (Rupiah) - Real Money, % for Charity
+        </h1>
+        <p style='text-align: center; font-size: 18px; color: #212121;'>
+            Everyone places a bet on either <strong>'Boy'</strong> or <strong>'Girl'</strong>.<br>
+            When the actual gender is revealed, all the money from those who bet incorrectly is pooled and shared among the winners in proportion to how much they bet. 
+            The fewer the amount bet correctly, the larger each winner's payout will be — so if the 'Girl' pool is much smaller and 'Girl' is correct,
+            the payout multiplier will be much higher. 
+            The multiplier is calculated at the end of the event. So if you place a bet on girl when theres 15jt in the boy pool
+            and 1 jt in the girl pool, you are not guaranteed a large multiplier if the pools reach equilibrium
+            <br><br>
+            <em>Note:</em> 20% of each winner’s profit is automatically donated to Nathan’s foundation.
+            <br><br>
+            <strong>📌 Please transfer your bet amount to: <u>6500887786 a/n Joseph Ian Tanuri</u></strong><br>
+            <strong><em>“Untuk Kalangan Sendiri”</em></strong>
+        </p>
+        """,
+        unsafe_allow_html=True
+    )
+# -------------------------
 # Recalculate Totals
 # -------------------------
 total_boy = st.session_state.bets[st.session_state.bets['Choice'] == 'Boy']['Bet'].sum()
