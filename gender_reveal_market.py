@@ -53,9 +53,10 @@ input, textarea, select {
 # -------------------------
 # Handle Pop-out View Mode
 # -------------------------
-query_params = st.experimental_get_query_params()
-popout_mode = query_params.get("view", [None])[0]
-
+query_params = dict(st.query_params)
+popout_mode = query_params.get("view")
+if isinstance(popout_mode, list):
+    popout_mode = popout_mode[0]
 # -------------------------
 # Header & Description (only in main view)
 # -------------------------
