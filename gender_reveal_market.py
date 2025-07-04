@@ -91,7 +91,7 @@ if not popout_mode:
     st.image("baby.png", width=1000)
     st.markdown(
         """
-        <h1 style='text-align: center; margin-top: -250px;'>
+        <h1 style='text-align: center; margin-top: -1px;'>
             🎉 Gender Reveal Prediction Market (Rupiah) - Real Money, % for Charity
         </h1>
         <p style='text-align: center; font-size: 18px; color: #212121;'>
