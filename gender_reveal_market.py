@@ -177,6 +177,7 @@ if total_pool > 0:
 # Pop-out Views
 # -------------------------
 if popout_mode == "pie":
+    st.markdown("<h1 style='text-align: center; font-size: 36px;'>Place your bet: Boy or Girl</h1>", unsafe_allow_html=True)
     bets = load_bets()
     total_boy = bets[bets['Choice'] == 'Boy']['Bet'].sum()
     total_girl = bets[bets['Choice'] == 'Girl']['Bet'].sum()
@@ -200,6 +201,7 @@ if popout_mode == "pie":
     st.stop()
 
 elif popout_mode == "line":
+    st.markdown("<h1 style='text-align: center; font-size: 36px;'>Place your bet: Boy or Girl</h1>", unsafe_allow_html=True)
     odds = load_odds()
     if not odds.empty:
         fig = px.line(
