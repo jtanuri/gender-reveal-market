@@ -4,18 +4,48 @@ import plotly.express as px
 from datetime import datetime
 from io import BytesIO
 import time
+import os
 
 # -------------------------
-# Session State Initialization
+# File paths
+# -------------------------
+BETS_FILE = "bets.csv"
+ODDS_FILE = "odds_history.csv"
+
+# -------------------------
+# Load/save data from file if available
+# -------------------------
+def load_bets():
+    if os.path.exists(BETS_FILE):
+        return pd.read_csv(BETS_FILE)
+    else:
+        return pd.DataFrame(columns=['Name', 'Choice', 'Bet'])
+
+def save_bets(df):
+    df.to_csv(BETS_FILE, index=False)
+
+def load_odds():
+    if os.path.exists(ODDS_FILE):
+        df = pd.read_csv(ODDS_FILE)
+        df['Timestamp'] = pd.to_datetime(df['Timestamp'])
+        return df
+    else:
+        return pd.DataFrame(columns=['Timestamp', 'Boy', 'Girl'])
+
+def save_odds(df):
+    df.to_csv(ODDS_FILE, index=False)
+
+# -------------------------
+# Session Initialization
 # -------------------------
 if 'bets' not in st.session_state:
-    st.session_state.bets = pd.DataFrame(columns=['Name', 'Choice', 'Bet'])
+    st.session_state.bets = load_bets()
 
 if 'actual_gender' not in st.session_state:
     st.session_state.actual_gender = None
 
 if 'odds_history' not in st.session_state:
-    st.session_state.odds_history = pd.DataFrame(columns=['Timestamp', 'Boy', 'Girl'])
+    st.session_state.odds_history = load_odds()
 
 # -------------------------
 # Page Config & Styling
@@ -55,26 +85,7 @@ if isinstance(popout_mode, list):
     popout_mode = popout_mode[0]
 
 # -------------------------
-# Header & Description (only in main view)
-# -------------------------
-if not popout_mode:
-    st.image("baby.png", width=1000)
-    st.markdown("""
-    <h1 style='text-align: center; margin-top: -250px;'>🎉 Gender Reveal Prediction Market (Rupiah)</h1>
-    <p style='text-align: center; font-size: 18px;'>
-        Everyone places a bet on either <strong>'Boy'</strong> or <strong>'Girl'</strong>.<br>
-        When the actual gender is revealed, all the money from those who bet incorrectly is pooled and shared among the winners in proportion to how much they bet. 
-        The fewer the amount bet correctly, the larger each winner's payout will be.
-        <br><br>
-        <em>Note:</em> 20% of each winner’s profit is automatically donated to Nathan’s foundation.
-        <br><br>
-        <strong>📌 Please transfer your bet amount to: <u>6500887786 a/n Joseph Ian Tanuri</u></strong>
-        <br><em>“Untuk Kalangan Sendiri”</em>
-    </p>
-    """, unsafe_allow_html=True)
-
-# -------------------------
-# Recalculate totals
+# Recalculate Totals
 # -------------------------
 total_boy = st.session_state.bets[st.session_state.bets['Choice'] == 'Boy']['Bet'].sum()
 total_girl = st.session_state.bets[st.session_state.bets['Choice'] == 'Girl']['Bet'].sum()
@@ -90,19 +101,26 @@ if total_pool > 0:
         boy_odds != st.session_state.odds_history.iloc[-1]['Boy'] or
         girl_odds != st.session_state.odds_history.iloc[-1]['Girl']
     ):
+        new_odds = pd.DataFrame([{
+            'Timestamp': datetime.now(),
+            'Boy': boy_odds,
+            'Girl': girl_odds
+        }])
         st.session_state.odds_history = pd.concat([
             st.session_state.odds_history,
-            pd.DataFrame([{
-                'Timestamp': datetime.now(),
-                'Boy': boy_odds,
-                'Girl': girl_odds
-            }])
+            new_odds
         ], ignore_index=True)
+        save_odds(st.session_state.odds_history)
 
 # -------------------------
-# Pop-out chart modes
+# Pop-out Views
 # -------------------------
 if popout_mode == "pie":
+    bets = load_bets()
+    total_boy = bets[bets['Choice'] == 'Boy']['Bet'].sum()
+    total_girl = bets[bets['Choice'] == 'Girl']['Bet'].sum()
+    total_pool = total_boy + total_girl
+
     if total_pool > 0:
         fig = px.pie(
             names=['Boy', 'Girl'],
@@ -118,71 +136,43 @@ if popout_mode == "pie":
         st.rerun()
     else:
         st.warning("⚠️ Not enough data to render pie chart. Please place some bets.")
+    st.stop()
 
 elif popout_mode == "line":
-    if not st.session_state.odds_history.empty:
-        df = st.session_state.odds_history.copy()
-        df['Timestamp'] = pd.to_datetime(df['Timestamp'])
-        fig = px.line(df, x='Timestamp', y=['Boy', 'Girl'], markers=True, title='Live Odds Over Time')
+    odds = load_odds()
+    if not odds.empty:
+        fig = px.line(
+            odds,
+            x='Timestamp',
+            y=['Boy', 'Girl'],
+            markers=True,
+            title='Live Odds Over Time'
+        )
         fig.update_layout(paper_bgcolor='#fff9c4', plot_bgcolor='#fff9c4')
         st.plotly_chart(fig, use_container_width=True)
         time.sleep(10)
         st.rerun()
     else:
         st.warning("⚠️ No odds history yet. Please place a bet.")
+    st.stop()
 
-elif not popout_mode:
-    # Your full existing dashboard logic goes here, unchanged
-    # Including: bet form, live market display, admin section
-    # -------------------------
-    # 📌 Place Your Bet
-    # -------------------------
-    with st.expander("📌 Place Your Bet"):
-        with st.form("bet_form"):
-            name = st.text_input("Your Name")
-            choice = st.selectbox("Your Prediction", ["Boy", "Girl"])
-            bet = st.number_input("Bet Amount (Rupiah)", min_value=10000, step=10000)
-            submitted = st.form_submit_button("Place Bet")
-            if submitted:
-                new_bet = pd.DataFrame([[name, choice, bet]], columns=['Name', 'Choice', 'Bet'])
-                st.session_state.bets = pd.concat([st.session_state.bets, new_bet], ignore_index=True)
-                st.rerun()
+# -------------------------
+# MAIN DASHBOARD: Live Market + Admin
+# -------------------------
+if not popout_mode:
+    st.header("📊 Live Market")
 
-    # -------------------------
-    # Show Bets + Remove Option
-    # -------------------------
-    st.header("📝 Current Bets")
-    if not st.session_state.bets.empty:
-        bets_display = st.session_state.bets.copy()
-        bets_display['Bet'] = bets_display['Bet'].apply(lambda x: f"Rp {x:,.0f}")
-        st.dataframe(bets_display)
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("💙 Boy Odds", f"{boy_odds:.2%}")
+    with col2:
+        st.metric("💖 Girl Odds", f"{girl_odds:.2%}")
 
-        with st.expander("🗑️ Remove a Bet"):
-            bet_index = st.number_input(
-                "Row index to remove (starts at 0)",
-                min_value=0,
-                max_value=len(st.session_state.bets) - 1,
-                step=1
-            )
-            if st.button("Remove Selected Bet"):
-                st.session_state.bets = st.session_state.bets.drop(index=bet_index).reset_index(drop=True)
-                st.rerun()
+    st.write(f"**Total Pool:** Rp {total_pool:,.0f}")
 
-    # -------------------------
-    # Live Market
-    # -------------------------
+    # Pie Chart
     if total_pool > 0:
-        st.header("📊 Live Market")
-
-        col1, col2 = st.columns(2)
-        with col1:
-            st.metric("💙 Boy Odds", f"{boy_odds:.2%}")
-        with col2:
-            st.metric("💗 Girl Odds", f"{girl_odds:.2%}")
-
-        st.write(f"**Total Pool:** Rp {total_pool:,.0f}")
-
-        fig_pie = px.pie(
+        pie_fig = px.pie(
             names=['Boy', 'Girl'],
             values=[total_boy, total_girl],
             color=['Boy', 'Girl'],
@@ -190,26 +180,26 @@ elif not popout_mode:
             hole=0.3,
             title="Current Bet Distribution"
         )
-        fig_pie.update_layout(paper_bgcolor='#fff9c4')
-        st.plotly_chart(fig_pie, use_container_width=True)
+        pie_fig.update_layout(paper_bgcolor='#fff9c4')
+        st.plotly_chart(pie_fig, use_container_width=True)
 
-        if not st.session_state.odds_history.empty:
-            st.subheader("📈 Odds Over Time")
-            df = st.session_state.odds_history.copy()
-            df['Timestamp'] = pd.to_datetime(df['Timestamp'])
-            fig_line = px.line(
-                df,
-                x='Timestamp',
-                y=['Boy', 'Girl'],
-                markers=True,
-                title='Odds History'
-            )
-            fig_line.update_layout(paper_bgcolor='#fff9c4', plot_bgcolor='#fff9c4')
-            st.plotly_chart(fig_line, use_container_width=True)
+    # Line Chart
+    if not st.session_state.odds_history.empty:
+        line_fig = px.line(
+            st.session_state.odds_history,
+            x='Timestamp',
+            y=['Boy', 'Girl'],
+            markers=True,
+            title='Market Probability History'
+        )
+        line_fig.update_layout(paper_bgcolor='#fff9c4', plot_bgcolor='#fff9c4')
+        st.plotly_chart(line_fig, use_container_width=True)
 
-    # -------------------------
-    # 🔒 SECRET ADMIN SECTION: Reveal Gender, Payouts, Reset
-    # -------------------------
+    st.markdown("""
+    🔄 [Open Pie Chart in New Tab](?view=pie) | [Open Line Chart in New Tab](?view=line)
+    """)
+
+    # 🔒 SECRET ADMIN SECTION: Reveal Gender, Payouts & Reset
     with st.expander("🔒 Admin: Reveal Gender, Payouts & Reset"):
         admin_pass = st.text_input("Enter admin password:", type="password")
 
@@ -250,7 +240,7 @@ elif not popout_mode:
                 towrite.seek(0)
 
                 st.download_button(
-                    label="📅 Download Payouts as Excel",
+                    label="📥 Download Payouts as Excel",
                     data=towrite,
                     file_name="GenderReveal_Payouts.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -261,12 +251,8 @@ elif not popout_mode:
                 st.session_state.bets = pd.DataFrame(columns=['Name', 'Choice', 'Bet'])
                 st.session_state.actual_gender = None
                 st.session_state.odds_history = pd.DataFrame(columns=['Timestamp', 'Boy', 'Girl'])
+                save_bets(st.session_state.bets)
+                save_odds(st.session_state.odds_history)
                 st.rerun()
         else:
             st.info("🔑 Enter the admin password to access this section.")
-
-    st.markdown("""
-    ---
-    ### 🔗 Open Charts in New Window
-    [Open Pie Chart](?view=pie) | [Open Line Chart](?view=line)
-    """)
