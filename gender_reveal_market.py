@@ -50,7 +50,7 @@ input, textarea, select {
 # -------------------------
 # Handle Pop-out View Mode
 # -------------------------
-query_params = st.query_params
+query_params = st.query_params.to_dict(flat=False)
 popout_mode = query_params.get("view", [None])[0]
 
 # -------------------------
