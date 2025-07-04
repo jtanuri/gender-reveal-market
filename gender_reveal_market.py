@@ -106,6 +106,49 @@ if not popout_mode:
         """,
         unsafe_allow_html=True
     )
+
+...
+
+# -------------------------
+# Place Your Bet Section
+# -------------------------
+if not popout_mode:
+    with st.expander("📌 Place Your Bet"):
+        with st.form("bet_form"):
+            name = st.text_input("Your Name")
+            choice = st.selectbox("Your Prediction", ["Boy", "Girl"])
+            bet = st.number_input("Bet Amount (Rupiah)", min_value=10000, step=10000)
+            submitted = st.form_submit_button("Place Bet")
+            if submitted:
+                new_bet = pd.DataFrame([[name, choice, bet]], columns=['Name', 'Choice', 'Bet'])
+                st.session_state.bets = pd.concat([st.session_state.bets, new_bet], ignore_index=True)
+                save_bets(st.session_state.bets)
+                st.rerun()
+
+    # -------------------------
+    # Show Bets + Remove Option
+    # -------------------------
+    st.header("📝 Current Bets")
+
+    if not st.session_state.bets.empty:
+        bets_display = st.session_state.bets.copy()
+        bets_display['Bet'] = bets_display['Bet'].apply(lambda x: f"Rp {x:,.0f}")
+        st.dataframe(bets_display)
+
+        with st.expander("🗑️ Remove a Bet"):
+            bet_index = st.number_input(
+                "Row index to remove (starts at 0)",
+                min_value=0,
+                max_value=len(st.session_state.bets) - 1,
+                step=1
+            )
+            if st.button("Remove Selected Bet"):
+                st.session_state.bets = st.session_state.bets.drop(index=bet_index).reset_index(drop=True)
+                save_bets(st.session_state.bets)
+                st.rerun()
+
+...
+
 # -------------------------
 # Recalculate Totals
 # -------------------------
