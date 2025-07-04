@@ -107,8 +107,6 @@ if not popout_mode:
         unsafe_allow_html=True
     )
 
-...
-
 # -------------------------
 # Place Your Bet Section
 # -------------------------
@@ -146,8 +144,6 @@ if not popout_mode:
                 st.session_state.bets = st.session_state.bets.drop(index=bet_index).reset_index(drop=True)
                 save_bets(st.session_state.bets)
                 st.rerun()
-
-...
 
 # -------------------------
 # Recalculate Totals
