@@ -4,6 +4,9 @@ import plotly.express as px
 from datetime import datetime
 from io import BytesIO
 import time
+import warnings
+
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 # -------------------------
 # Session State Initialization
@@ -50,7 +53,7 @@ input, textarea, select {
 # -------------------------
 # Handle Pop-out View Mode
 # -------------------------
-query_params = st.query_params.to_dict(flat=False)
+query_params = st.experimental_get_query_params()
 popout_mode = query_params.get("view", [None])[0]
 
 # -------------------------
