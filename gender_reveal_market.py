@@ -254,6 +254,7 @@ if not popout_mode:
             y=['Boy', 'Girl'],
             markers=True,
             title='Market Probability History'
+            color_discrete_map={'Boy': '#1f77b4', 'Girl': '#ff69b4'}
         )
         line_fig.update_layout(paper_bgcolor='#fff9c4', plot_bgcolor='#fff9c4')
         st.plotly_chart(line_fig, use_container_width=True)
