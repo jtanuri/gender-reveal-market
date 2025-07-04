@@ -4,3 +4,4 @@ seaborn
 xlsxwriter
 pandas
 openpyxl
+plotly
