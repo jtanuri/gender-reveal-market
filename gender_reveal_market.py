@@ -194,7 +194,7 @@ if popout_mode == "pie":
         st.metric("💖 Girl Odds", f"{girl_odds:.2%}")
 
     st.markdown(f"**Total Pool:** Rp {total_pool:,.0f}")
-        bets = load_bets()
+    bets = load_bets()
         total_boy = bets[bets['Choice'] == 'Boy']['Bet'].sum()
         total_girl = bets[bets['Choice'] == 'Girl']['Bet'].sum()
         total_pool = total_boy + total_girl
