@@ -178,6 +178,7 @@ if total_pool > 0:
 # Pop-out Views
 # -------------------------
 if popout_mode == "pie":
+    st.markdown("""<meta http-equiv="refresh" content="5">""", unsafe_allow_html=True)
     st.markdown("<h1 style='text-align: center; font-size: 36px;'>Place your bet: Boy or Girl</h1>", unsafe_allow_html=True)
     bets = pd.read_csv("bets.csv")
     # Recalculate odds
