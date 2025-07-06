@@ -199,22 +199,19 @@ if popout_mode == "pie":
 
     # Pie Chart
     if total_pool > 0:
-        fig1, ax1 = plt.subplots(figsize=(4, 4), facecolor='#fff9c4')
-        ax1.set_facecolor('#fff9c4')
-        explode = (0.05, 0.05)
-        ax1.pie(
-            [total_boy, total_girl],
-            labels=['Boy', 'Girl'],
-            colors=['#1f77b4', '#ff69b4'],
-            autopct='%1.1f%%',
-            shadow=True,
-            startangle=90,
-            explode=explode,
-            textprops={'color': '#212121'}
+        fig = px.pie(
+            names=['Boy', 'Girl'],
+            values=[total_boy, total_girl],
+            color_discrete_sequence=['#1f77b4', '#ff69b4'],
+            title='Current Bet Distribution'
         )
-        ax1.set_title('Current Bet Distribution', color='#212121')
-        fig1.patch.set_facecolor('#fff9c4')
-        st.pyplot(fig1)
+        fig.update_traces(textinfo='percent+label', pull=[0.05, 0.05])
+        fig.update_layout(
+            paper_bgcolor='#fff9c4',
+            plot_bgcolor='#fff9c4',
+            font_color='#212121'
+        )
+        st.plotly_chart(fig, use_container_width=True)
     else:
         st.warning("⚠️ Not enough data to render pie chart. Please place some bets.")
     st.stop()
