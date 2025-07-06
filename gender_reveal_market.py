@@ -5,6 +5,7 @@ from datetime import datetime
 from io import BytesIO
 import time
 import os
+import matplotlib.pyplot as plt
 
 # -------------------------
 # File paths
