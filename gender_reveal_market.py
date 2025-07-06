@@ -178,6 +178,7 @@ if total_pool > 0:
 # -------------------------
 if popout_mode == "pie":
     st.markdown("<h1 style='text-align: center; font-size: 36px;'>Place your bet: Boy or Girl</h1>", unsafe_allow_html=True)
+
     # Recalculate odds
     total_boy = bets[bets['Choice'] == 'Boy']['Bet'].sum()
     total_girl = bets[bets['Choice'] == 'Girl']['Bet'].sum()
