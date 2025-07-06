@@ -195,24 +195,25 @@ if popout_mode == "pie":
         st.metric("💖 Girl Odds", f"{girl_odds:.2%}")
 
     st.markdown(f"**Total Pool:** Rp {total_pool:,.0f}")
-    bets = load_bets()
-        total_boy = bets[bets['Choice'] == 'Boy']['Bet'].sum()
-        total_girl = bets[bets['Choice'] == 'Girl']['Bet'].sum()
-        total_pool = total_boy + total_girl
 
+    # Pie Chart
     if total_pool > 0:
-        fig = px.pie(
-            names=['Boy', 'Girl'],
-            values=[total_boy, total_girl],
-            color=['Boy', 'Girl'],
-            color_discrete_map={'Boy': '#1f77b4', 'Girl': '#ff69b4'},
-            hole=0.3,
-            title="Live Bet Distribution"
+        fig1, ax1 = plt.subplots(figsize=(4, 4), facecolor='#fff9c4')
+        ax1.set_facecolor('#fff9c4')
+        explode = (0.05, 0.05)
+        ax1.pie(
+            [total_boy, total_girl],
+            labels=['Boy', 'Girl'],
+            colors=['#1f77b4', '#ff69b4'],
+            autopct='%1.1f%%',
+            shadow=True,
+            startangle=90,
+            explode=explode,
+            textprops={'color': '#212121'}
         )
-        fig.update_layout(paper_bgcolor='#fff9c4')
-        st.plotly_chart(fig, use_container_width=True)
-        time.sleep(10)
-        st.rerun()
+        ax1.set_title('Current Bet Distribution', color='#212121')
+        fig1.patch.set_facecolor('#fff9c4')
+        st.pyplot(fig1)
     else:
         st.warning("⚠️ Not enough data to render pie chart. Please place some bets.")
     st.stop()
