@@ -178,10 +178,26 @@ if total_pool > 0:
 # -------------------------
 if popout_mode == "pie":
     st.markdown("<h1 style='text-align: center; font-size: 36px;'>Place your bet: Boy or Girl</h1>", unsafe_allow_html=True)
-    bets = load_bets()
+    # Recalculate odds
     total_boy = bets[bets['Choice'] == 'Boy']['Bet'].sum()
     total_girl = bets[bets['Choice'] == 'Girl']['Bet'].sum()
     total_pool = total_boy + total_girl
+    boy_odds = total_boy / total_pool if total_pool > 0 else 0
+    girl_odds = total_girl / total_pool if total_pool > 0 else 0
+
+    st.markdown("## 📊 Live Market")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("💙 Boy Odds", f"{boy_odds:.2%}")
+    with col2:
+        st.metric("💖 Girl Odds", f"{girl_odds:.2%}")
+
+    st.markdown(f"**Total Pool:** Rp {total_pool:,.0f}")
+        bets = load_bets()
+        total_boy = bets[bets['Choice'] == 'Boy']['Bet'].sum()
+        total_girl = bets[bets['Choice'] == 'Girl']['Bet'].sum()
+        total_pool = total_boy + total_girl
 
     if total_pool > 0:
         fig = px.pie(
