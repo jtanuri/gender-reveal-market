@@ -98,9 +98,7 @@ if not popout_mode:
         <p style='text-align: center; font-size: 18px; color: #212121;'>
             Everyone places a bet on either <strong>'Boy'</strong> or <strong>'Girl'</strong>.<br>
             Winners share the loser pool money proportionally. The multiplier is calculated at the end of the event.
-            <br><br>
             <em>Note:</em> 20% of each winner’s profit will be donated to a chosen non-profit.
-            <br><br>
             <strong>📌 Please transfer your bet amount to: <u>6500887786 a/n Joseph Ian Tanuri</u></strong><br>
             <strong><em>“Untuk Kalangan Sendiri”</em></strong>
         </p>
